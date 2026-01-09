@@ -1,15 +1,15 @@
-const CACHE_NAME = "money-planner-v1";
+const CACHE_NAME = "money-planner-v2";
 const APP_SHELL = [
-  "/",
-  "/index.html",
-  "/savings.html",
-  "/planner.html",
-  "/styles.css",
-  "/app.js",
-  "/manifest.json",
-  "/icons/apple-touch-icon.png",
-  "/icons/icon-192.png",
-  "/icons/icon-512.png"
+  "./",
+  "./index.html",
+  "./savings.html",
+  "./planner.html",
+  "./styles.css",
+  "./app.js",
+  "./manifest.json",
+  "./icons/apple-touch-icon.png",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png"
 ];
 
 self.addEventListener("install", (event) => {
@@ -32,16 +32,18 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const req = event.request;
 
-  // For page navigations, serve cached page if offline
+  // For page navigations, try network first, then fall back to cached index.html
   if (req.mode === "navigate") {
     event.respondWith(
-      fetch(req).catch(() => caches.match("/index.html"))
+      fetch(req).catch(() => caches.match("./index.html"))
     );
     return;
   }
 
-  // For everything else, cache-first
+  // For other assets, cache-first
   event.respondWith(
     caches.match(req).then((cached) => cached || fetch(req))
   );
 });
+
+
