@@ -53,15 +53,20 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
-// Register service worker for PWA offline support
+// Service Worker registration (PWA offline support)
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("./sw.js")
-      .catch((err) => {
-        console.warn("Service worker registration failed:", err);
+      .then(() => {
+        console.log("Service Worker registered");
+      })
+      .catch((error) => {
+        console.error("Service Worker registration failed:", error);
       });
   });
 }
+
+
 
 
