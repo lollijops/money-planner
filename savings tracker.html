@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Savings Tracker</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a href="./index.html">Dashboard</a>
+      <a class="active" href="./savings.html">Savings</a>
+      <a href="./planner.html">Planner</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1>Savings Tracker</h1>
+      <div class="kpi">
+        <div class="kpi-label">Current Balance</div>
+        <div id="balance" class="kpi-value">£0.00</div>
+      </div>
+      <button id="openTxModal" class="btn">Add transaction</button>
+    </section>
+
+    <section class="card">
+      <h2>Recent transactions</h2>
+      <div id="txList" class="list"></div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <dialog id="txModal" class="modal">
+    <form id="txForm" method="dialog" class="modal-body">
+      <h3>Add transaction</h3>
+
+      <label>
+        Type / Category
+        <input name="category" required placeholder="e.g., Groceries, Salary" />
+      </label>
+
+      <label>
+        Kind
+        <select name="kind" required>
+          <option value="expense">Expense</option>
+          <option value="saving">Saving</option>
+        </select>
+      </label>
+
+      <label>
+        Amount
+        <input name="amount" type="number" step="0.01" min="0" required />
+      </label>
+
+      <label>
+        Date
+        <input name="date" type="datetime-local" />
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="btn secondary" id="closeTxModal">Cancel</button>
+        <button type="submit" class="btn">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="./app.js"></script>
+  <script>
+    // Page controller
+    const balanceEl = document.getElementById("balance");
+    const txListEl = document.getElementById("txList");
+    const txModal = document.getElementById("txModal");
+    const openTxModalBtn = document.getElementById("openTxModal");
+    const closeTxModalBtn = document.getElementById("closeTxModal");
+    const txForm = document.getElementById("txForm");
+
+    function renderSavings() {
+      const txs = getTransactions().sort((a,b) => new Date(b.date) - new Date(a.date));
+      const bal = calculateBalance(txs);
+      balanceEl.textContent = formatCurrency(bal);
+
+      txListEl.innerHTML = txs.slice(0, 20).map(tx => `
+        <div class="row">
+          <div>
+            <div class="row-title">${escapeHtml(tx.category)}</div>
+            <div class="row-sub">${new Date(tx.date).toLocaleString()}</div>
+          </div>
+          <div class="row-amount ${tx.kind === "saving" ? "pos" : "neg"}">
+            ${tx.kind === "saving" ? "+" : "-"}${formatCurrency(Number(tx.amount))}
+          </div>
+        </div>
+      `).join("") || `<div class="muted">No transactions yet.</div>`;
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[m]));
+    }
+
+    openTxModalBtn.addEventListener("click", () => txModal.showModal());
+    closeTxModalBtn.addEventListener("click", () => txModal.close());
+
+    txForm.addEventListener("submit", () => {
+      const data = new FormData(txForm);
+      const category = data.get("category");
+      const kind = data.get("kind");
+      const amount = Number(data.get("amount"));
+      const dateInput = data.get("date");
+      const date = dateInput ? new Date(dateInput).toISOString() : new Date().toISOString();
+
+      const txs = getTransactions();
+      txs.push({ id: uid("tx"), category, kind, amount, date });
+      saveTransactions(txs);
+
+      txForm.reset();
+      txModal.close();
+      renderSavings();
+    });
+
+    renderSavings();
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+:root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+body { margin: 0; background: #f6f7fb; color: #111; }
+a { text-decoration: none; color: inherit; }
+
+.topbar { background: #fff; border-bottom: 1px solid #e6e6ea; }
+.nav { max-width: 1000px; margin: 0 auto; padding: 14px 16px; display: flex; gap: 14px; }
+.nav a { padding: 8px 10px; border-radius: 10px; }
+.nav a.active { background: #111; color: #fff; }
+
+.container { max-width: 1000px; margin: 18px auto; padding: 0 16px; }
+.grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .grid { grid-template-columns: 1.2fr 1fr; } }
+
+.card { background: #fff; border: 1px solid #e6e6ea; border-radius: 16px; padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.kpi { margin: 12px 0 16px; }
+.kpi-label { color: #666; font-size: 14px; }
+.kpi-value { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; }
+
+.btn { background: #111; color: #fff; border: none; border-radius: 12px; padding: 10px 12px; cursor: pointer; display: inline-block; }
+.btn.secondary { background: #efeff4; color: #111; }
+
+.list { display: grid; gap: 10px; margin-top: 10px; }
+.row { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px; border: 1px solid #eee; border-radius: 12px; }
+.row-title { font-weight: 600; }
+.row-sub { font-size: 12px; color: #666; margin-top: 2px; }
+.row-amount { font-weight: 700; }
+.row-amount.pos { color: #0a7a28; }
+.row-amount.neg { color: #b10015; }
+
+.muted { color: #666; }
+.small { font-size: 12px; }
+
+.modal { border: none; border-radius: 16px; padding: 0; max-width: 520px; width: calc(100% - 24px); }
+.modal::backdrop { background: rgba(0,0,0,.35); }
+.modal-body { padding: 16px; display: grid; gap: 10px; }
+.modal-body label { display: grid; gap: 6px; font-size: 14px; }
+.modal-body input, .modal-body select, .modal-body textarea {
+  padding: 10px 12px; border-radius: 12px; border: 1px solid #ddd;
+}
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+
+.checkbox-row { display: flex; gap: 10px; align-items: center; padding: 10px; border: 1px solid #eee; border-radius: 12px; }
+.done { text-decoration: line-through; color: #666; }
+
+.pill { font-size: 12px; padding: 6px 10px; border-radius: 999px; border: 1px solid #ddd; }
+.pill-open { background: #fff; }
+.pill-done { background: #efeff4; }
